@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Fab from '@material-ui/core/fab'; // floadting-action-button
+import Zoom from '@material-ui/core/Zoom';
+import AddIcon from '@material-ui/icons/Add';
 
 function CreateArea(props) {
   const defaultNote = {
@@ -31,12 +34,24 @@ function CreateArea(props) {
     return !str || (str && str.trim() === "");
   }
 
+  const [ isExpanded, setExpanded ] = useState(false);
+
+  function expand() {
+    setExpanded(true);
+  }
+
   return (
     <div>
-      <form onSubmit={submitNote}>
-        <input name="title" placeholder="Title" value={note.title} onChange={handleChange} />
-        <textarea name="content" placeholder="Take a note..." rows="3" value={note.content} onChange={handleChange} />
-        <button type="submit">Add</button>
+      <form className="create-note" onSubmit={submitNote}>
+        {isExpanded && <input name="title" placeholder="Title" value={note.title} onChange={handleChange} />}
+
+        <textarea name="content" onClick={expand} placeholder="Take a note..." rows={isExpanded ? 3 : 1} value={note.content} onChange={handleChange} />
+
+        <Zoom in={isExpanded}>
+          <Fab type="submit">
+            <AddIcon />
+          </Fab>
+        </Zoom>
       </form>
     </div>
   );
